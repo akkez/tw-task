@@ -16,9 +16,8 @@ class App
 
         '*' => 'fallback',
     ];
-    //MYSQL_USER, and MYSQL_PASSWORD
     private $dbOptions = [
-        'dsn' => 'mysql:host=localhost;charset=utf8mb4',
+        'dsn' => 'mysql:host=db;charset=utf8mb4',
         'user' => 'root',
         'password' => '',
     ];

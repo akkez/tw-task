@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  application:
+    build: ./.docker/application
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www/app
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
