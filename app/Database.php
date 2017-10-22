@@ -38,4 +38,26 @@ class Database
             $result->url, $result->type, $result->resultCount, json_encode($result->resultValues),
         ]);
     }
+
+    /**
+     * @return SearchResult[]
+     */
+    public function getResults()
+    {
+        $stmt = $this->dbh->query("SELECT * FROM " . self::RESULTS_TABLE_NAME . " ORDER BY id DESC");
+        $results = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $searchResult = new SearchResult();
+            $searchResult->id = $row['id'];
+            $searchResult->type = $row['type'];
+            $searchResult->url = $row['url'];
+            $searchResult->resultCount = $row['result_count'];
+            $searchResult->resultValues = json_decode($row['result_values'], true);
+            $searchResult->created = $row['created'];
+
+            $results[] = $searchResult;
+        }
+
+        return $results;
+    }
 }

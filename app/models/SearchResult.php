@@ -1,7 +1,9 @@
 <?php
 
-class SearchResult
+class SearchResult extends Model
 {
+    public $id;
+
     public $url;
     public $type;
     public $resultCount;

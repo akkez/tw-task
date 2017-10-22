@@ -2,19 +2,21 @@
 
 include __DIR__ . '/Controller.php';
 include __DIR__ . '/Database.php';
-include __DIR__ . '/SearchResult.php';
+include __DIR__ . '/models/Model.php';
+include __DIR__ . '/models/SearchResult.php';
 
 class App
 {
     private $routes = [
-        '/api' => 'api',
-        '/test' => 'test',
+        '/api/results' => 'actionResults',
+        '/api/search' => 'actionSearch',
+
         '*' => 'fallback',
     ];
     //MYSQL_USER, and MYSQL_PASSWORD
     private $dbOptions = [
         'dsn' => 'mysql:host=localhost;charset=utf8mb4',
-        'user' => 'root', # dbname=app;
+        'user' => 'root',
         'password' => '',
     ];
 
