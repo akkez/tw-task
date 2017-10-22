@@ -3,3 +3,6 @@
     $ cd tw-task
     $ docker-compose build
     $ docker-compose up -d
+
+# Test
+    $ http://localhost/
