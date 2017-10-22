@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import Results from './Results.vue'
 import Search from './Search.vue'
+import Detail from './Detail.vue'
 
 Vue.use(VueRouter);
 
@@ -13,8 +14,7 @@ const routes = [
     {path: '/', component: Search},
     {path: '/results', component: Results},
     {path: '/search', component: Search},
-
-    // {path: '/box/:boxId(\\d+)', component: Box, name: 'box'},
+    {path: '/detail/:detailId(\\d+)', component: Detail, name: 'detail'},
     {path: '*', component: Page404},
 ];
 

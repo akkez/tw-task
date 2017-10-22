@@ -12,6 +12,7 @@ class App
     private $routes = [
         '/api/results' => 'actionResults',
         '/api/search' => 'actionSearch',
+        '/api/detail' => 'actionDetail',
 
         '*' => 'fallback',
     ];

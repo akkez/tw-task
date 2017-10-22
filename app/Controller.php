@@ -18,6 +18,16 @@ class Controller
         return $this->json($data);
     }
 
+    public function actionDetail()
+    {
+        $id = $_GET['id'] ?? null;
+        $row = $this->app->db->getResult($id);
+        if ($row === false) {
+            return $this->json([]);
+        }
+        return $this->json($row->toArray());
+    }
+
     public function actionSearch()
     {
         $searchForm = new SearchForm();

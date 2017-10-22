@@ -45,13 +45,31 @@ class Database
 
     /**
      * @param $id
-     * @return SearchResult
+     * @return SearchResult|false
      */
     public function getResult($id)
     {
         $stmt = $this->dbh->prepare("SELECT * FROM " . self::RESULTS_TABLE_NAME . " WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row === false) {
+            return false;
+        }
+        $searchResult = $this->populateResult($row);
+        return $searchResult;
+    }
+
+    private function populateResult($row)
+    {
+        $searchResult = new SearchResult();
+        $searchResult->id = $row['id'];
+        $searchResult->type = $row['type'];
+        $searchResult->url = $row['url'];
+        $searchResult->resultCount = $row['result_count'];
+        $searchResult->resultValues = json_decode($row['result_values'], true);
+        $searchResult->created = $row['created'];
+
+        return $searchResult;
     }
 
     /**
@@ -62,15 +80,7 @@ class Database
         $stmt = $this->dbh->query("SELECT * FROM " . self::RESULTS_TABLE_NAME . " ORDER BY id DESC");
         $results = [];
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $searchResult = new SearchResult();
-            $searchResult->id = $row['id'];
-            $searchResult->type = $row['type'];
-            $searchResult->url = $row['url'];
-            $searchResult->resultCount = $row['result_count'];
-            $searchResult->resultValues = json_decode($row['result_values'], true);
-            $searchResult->created = $row['created'];
-
-            $results[] = $searchResult;
+            $results[] = $this->populateResult($row);
         }
 
         return $results;
