@@ -10,7 +10,7 @@
                 </div>
                 <div v-if="message !== false">
                     <div class="alert alert-info">
-                        {{message}}
+                        {{message}} <router-link v-if="detailId !== false" :to="'/detail/' + this.detailId">Подробнее</router-link>
                     </div>
                 </div>
 
@@ -36,12 +36,6 @@
                             Искать
                         </button>
                     </div>
-
-                    url = {{url}}
-                    <br>
-                    type = {{type}}
-                    <br>
-                    q = {{textQuery}}
                 </form>
             </div>
         </div>
@@ -50,6 +44,7 @@
 
 <script>
     import axios from 'axios';
+    var qs = require('qs');
 
     export default {
         name: 'search',
@@ -60,11 +55,12 @@
                 textQuery: '',
                 error: false,
                 message: false,
+                detailId: false,
             }
         },
         methods: {
             submit: function () {
-                this.error = false;
+                this.error = this.message = this.detailId = false;
                 if (!this.validate()) {
                     return;
                 }
@@ -72,17 +68,23 @@
                 axios({
                     method: 'POST',
                     url: '/api/search',
-                    data: {
+                    data: qs.stringify({
                         type: this.type,
                         url: this.url,
                         query: this.type === 'text' ? this.textQuery : undefined
-                    }
+                    })
                 }).then(response => {
                     var data = response.data;
+                    if (data.error) {
+                        this.error = data.error;
+                        return;
+                    }
+                    if (data.message) {
+                        this.message = data.message;
+                        this.detailId = data.id;
+                    }
                     console.log(data);
                 });
-
-//                var form = this.$refs.form;
             },
             validate: function () {
                 if (this.url.length === 0) {
@@ -90,7 +92,7 @@
                     return false;
                 }
                 if (!/^https?:\/\/[a-z0-9\\.-/]+(.*?)/i.test(this.url)) {
-                    this.error = 'Пожалуйста, введите корректный URL';
+                    this.error = 'Пожалуйста, введите корректный URL (hint: он должен начинаться с http)';
                     return false;
                 }
                 if (this.type === 'text' && this.textQuery.length === 0) {

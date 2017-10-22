@@ -2,8 +2,10 @@
 
 include __DIR__ . '/Controller.php';
 include __DIR__ . '/Database.php';
+include __DIR__ . '/HttpHelper.php';
 include __DIR__ . '/models/Model.php';
 include __DIR__ . '/models/SearchResult.php';
+include __DIR__ . '/models/SearchForm.php';
 
 class App
 {

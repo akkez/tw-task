@@ -34,9 +34,24 @@ class Database
           VALUES(?, ?, ?, ?, NOW())
         ");
 
-        return $statement->execute([
+        $result = $statement->execute([
             $result->url, $result->type, $result->resultCount, json_encode($result->resultValues),
         ]);
+        if (!$result) {
+            return false;
+        }
+        return $this->dbh->lastInsertId();
+    }
+
+    /**
+     * @param $id
+     * @return SearchResult
+     */
+    public function getResult($id)
+    {
+        $stmt = $this->dbh->prepare("SELECT * FROM " . self::RESULTS_TABLE_NAME . " WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
